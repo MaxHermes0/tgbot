@@ -27,6 +27,11 @@ def save_channels(channels):
     with open(CHANNELS_FILE, "w", encoding="utf-8") as f:
         json.dump(channels, f)
 
+
+async def manual_post(update, context):
+    await post(context.application)
+    await update.message.reply_text("Пост отправлен на все каналы.")
+
 async def post(application):
     channels = load_channels()
     if not channels:
@@ -98,7 +103,8 @@ async def main():
 
     asyncio.create_task(scheduled_posting())
     print("[startup] Running bot...")
-    await application.run_polling()
+    await application.add_handler(CommandHandler("post", manual_post))
+application.run_polling(drop_pending_updates=True)
 
 import asyncio
 import nest_asyncio
