@@ -38,8 +38,8 @@ async def post(application):
                 photo=InputFile(IMAGE_PATH.open("rb"), filename=IMAGE_PATH.name),
                 caption=random.choice(TEXT_MESSAGES)
             )
-            await asyncio.sleep(1.5)
             print(f"[post] Sent to {channel}")
+            await asyncio.sleep(20)  # 🕒 большая задержка между постами
         except RetryAfter as e:
             wait_time = int(e.retry_after) + 1
             print(f"[flood] Telegram flood control, sleeping for {wait_time} seconds")
