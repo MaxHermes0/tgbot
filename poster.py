@@ -38,6 +38,7 @@ async def post(application):
                 photo=InputFile(IMAGE_PATH),
                 caption=random.choice(TEXT_MESSAGES)
             )
+            await asyncio.sleep(1.5)  # задержка между отправками
             print(f"[post] Sent to {channel}")
         except Exception as e:
             print(f"[error] Failed to send to {channel}: {e}")
