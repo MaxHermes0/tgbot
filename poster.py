@@ -7,12 +7,12 @@ import json
 import os
 import random
 import nest_asyncio
+from telegram.error import RetryAfter
 
 BOT_TOKEN = "7940543543:AAHWXa9RdQC-xt-U8TsTnKtmzTYkd-BMaBE"
 WEBHOOK_URL = "https://tgbot-o0ze.onrender.com/webhook/7940543543:AAHWXa9RdQC-xt-U8TsTnKtmzTYkd-BMaBE"
 
 IMAGE_PATH = Path("image.jpg")
-CAPTION = "Привет"
 TEXT_MESSAGES = ["Здравствуйте", "Hello", "Hi there!", "Доброго дня!", "Привет всем!"]
 POST_EVERY_SECONDS = 24 * 60 * 60
 CHANNELS_FILE = "channels.json"
@@ -40,6 +40,10 @@ async def post(application):
             )
             await asyncio.sleep(1.5)
             print(f"[post] Sent to {channel}")
+        except RetryAfter as e:
+            wait_time = int(e.retry_after) + 1
+            print(f"[flood] Telegram flood control, sleeping for {wait_time} seconds")
+            await asyncio.sleep(wait_time)
         except Exception as e:
             print(f"[error] Failed to send to {channel}: {e}")
 
