@@ -10,8 +10,6 @@ import nest_asyncio
 from telegram.error import RetryAfter
 
 BOT_TOKEN = "7940543543:AAHWXa9RdQC-xt-U8TsTnKtmzTYkd-BMaBE"
-WEBHOOK_URL = "https://tgbot-o0ze.onrender.com/webhook/7940543543:AAHWXa9RdQC-xt-U8TsTnKtmzTYkd-BMaBE"
-
 IMAGE_PATH = Path("image.jpg")
 TEXT_MESSAGES = ["Здравствуйте", "Hello", "Hi there!", "Доброго дня!", "Привет всем!"]
 POST_EVERY_SECONDS = 24 * 60 * 60
@@ -39,7 +37,7 @@ async def post(application):
                 caption=random.choice(TEXT_MESSAGES)
             )
             print(f"[post] Sent to {channel}")
-            await asyncio.sleep(20)  # 🕒 большая задержка между постами
+            await asyncio.sleep(20)
         except RetryAfter as e:
             wait_time = int(e.retry_after) + 1
             print(f"[flood] Telegram flood control, sleeping for {wait_time} seconds")
@@ -52,7 +50,7 @@ async def manual_post(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Пост отправлен на все каналы.")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Бот работает через Webhook!")
+    await update.message.reply_text("Бот работает через polling!")
 
 async def main():
     app = Application.builder().token(BOT_TOKEN).build()
@@ -67,13 +65,8 @@ async def main():
 
     asyncio.create_task(scheduled_posting())
 
-    print("[startup] Setting webhook and starting application...")
-    await app.bot.set_webhook(url=WEBHOOK_URL)
-    await app.run_webhook(
-        listen="0.0.0.0",
-        port=int(os.environ.get("PORT", 10000)),
-        webhook_url=WEBHOOK_URL
-    )
+    print("[startup] Starting bot using polling...")
+    await app.run_polling(drop_pending_updates=True)
 
 if __name__ == "__main__":
     nest_asyncio.apply()
