@@ -1,14 +1,14 @@
 
 from telegram import Bot, Update, InputFile
 from telegram.ext import Application, CommandHandler, ContextTypes
-from telegram.ext import MessageHandler, filters
 from pathlib import Path
 import asyncio
 import json
 import os
+import random
+import nest_asyncio
 
 BOT_TOKEN = "7940543543:AAHWXa9RdQC-xt-U8TsTnKtmzTYkd-BMaBE"
-WEBHOOK_PATH = "/webhook/7940543543:AAHWXa9RdQC-xt-U8TsTnKtmzTYkd-BMaBE"
 WEBHOOK_URL = "https://tgbot-o0ze.onrender.com/webhook/7940543543:AAHWXa9RdQC-xt-U8TsTnKtmzTYkd-BMaBE"
 
 IMAGE_PATH = Path("image.jpg")
@@ -67,10 +67,9 @@ async def main():
     await app.run_webhook(
         listen="0.0.0.0",
         port=int(os.environ.get("PORT", 10000)),
-        webhook_path=WEBHOOK_PATH
+        webhook_url=WEBHOOK_URL
     )
 
 if __name__ == "__main__":
-    import nest_asyncio
     nest_asyncio.apply()
     asyncio.run(main())
