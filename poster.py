@@ -35,10 +35,10 @@ async def post(application):
         try:
             await application.bot.send_photo(
                 chat_id=channel,
-                photo=InputFile(IMAGE_PATH),
+                photo=InputFile(IMAGE_PATH.open("rb"), filename=IMAGE_PATH.name),
                 caption=random.choice(TEXT_MESSAGES)
             )
-            await asyncio.sleep(1.5)  # задержка между отправками
+            await asyncio.sleep(1.5)
             print(f"[post] Sent to {channel}")
         except Exception as e:
             print(f"[error] Failed to send to {channel}: {e}")
