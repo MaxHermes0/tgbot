@@ -103,8 +103,8 @@ async def main():
 
     asyncio.create_task(scheduled_posting())
     print("[startup] Running bot...")
+    await application.run_polling(drop_pending_updates=True)
     await application.add_handler(CommandHandler("post", manual_post))
-application.run_polling(drop_pending_updates=True)
 
 import asyncio
 import nest_asyncio
